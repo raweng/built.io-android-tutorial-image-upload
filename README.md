@@ -1,4 +1,4 @@
 built.io-android-tutorial-image-upload
 ======================================
 
-This sample application demonstrates the function of BuiltFile's upload/download properties and functionality.
+This sample project demonstrates how to upload and download files using the BuiltFile class.

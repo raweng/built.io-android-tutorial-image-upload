@@ -22,8 +22,9 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Toast;
 
 import com.raweng.built.BuiltError;
-import com.raweng.built.BuiltFile;
 import com.raweng.built.BuiltImageDownloadCallback;
+import com.raweng.built.BuiltUpload;
+import com.raweng.built.utilities.BuiltConstant;
 import com.raweng.built.view.BuiltImageView;
 
 /**
@@ -37,15 +38,15 @@ import com.raweng.built.view.BuiltImageView;
  * @author raw engineering, Inc
  *
  */
-public class ImageAdapter extends ArrayAdapter<BuiltFile> {
+public class ImageAdapter extends ArrayAdapter<BuiltUpload> {
 
 	Activity context;
-	ArrayList<BuiltFile> builtFileList;
+	ArrayList<BuiltUpload> builtFileList;
 	int width;
 	String bit;
 	
 	@SuppressLint("NewApi")
-	public ImageAdapter(Context context, ArrayList<BuiltFile> builtFileList){
+	public ImageAdapter(Context context, ArrayList<BuiltUpload> builtFileList){
 		super(context, 0, builtFileList);
 		
 		this.context = (Activity) context;
@@ -91,22 +92,19 @@ public class ImageAdapter extends ArrayAdapter<BuiltFile> {
 		/*
 		 * Setting image inside BuiltImageView using BuiltFile object.
 		 */
-		imageView.setBuiltFile(context, builtFileList.get(position), new BuiltImageDownloadCallback() {
-			
-			@Override
-			public void onSuccess(Bitmap bitMap) {
-				Log.i(context.getClass().getSimpleName(), bitMap.toString());
-			}
-			
-			@Override
-			public void onError(BuiltError error) {
-				Toast.makeText(context, "error :"+error.getErrorMessage(), Toast.LENGTH_SHORT).show();
-			}
-			
-			@Override
-			public void onAlways() {
-			}
-		});
+		imageView.setBuiltUpload(context, builtFileList.get(position), new BuiltImageDownloadCallback() {
+
+            @Override
+            public void onCompletion(BuiltConstant.ResponseType responseType, Bitmap bitmap, BuiltError builtError) {
+
+                if (builtError == null){
+                    Log.i(context.getClass().getSimpleName(), bitmap.toString());
+                }else {
+                    Toast.makeText(context, "Error :"+builtError.getErrorMessage(), Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
 		relative.addView(progressBar);
 		relative.addView(imageView);
 		
